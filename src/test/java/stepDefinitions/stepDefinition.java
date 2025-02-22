@@ -83,7 +83,7 @@ public class stepDefinition {
 		JDBCReusableMethods.closeConnection();
 	}
 
-// ******************* cron_schedules query **********************
+// ********************** cron_schedules query ********************************
 
 	@Given("\\(cron_schedules) SQL query'si  calistirilir")
 	public void cron_schedules_sql_query_si_calistirilir() {
@@ -110,7 +110,7 @@ public class stepDefinition {
 
 
 
-// ************** UPDATE **********************
+// ****************************** UPDATE ****************************************
 
 	@Given("Database ile baglanti kurulur.")
 	public void database_ile_baglanti_kurulur() {
@@ -126,9 +126,10 @@ public class stepDefinition {
 
 		// UPDATE users SET mobile = ? WHERE username LIKE ?;
 
-		preparedStatement.setString(1, "555555");
-		preparedStatement.setString(2, "%e_");
-		etkilenenSatirSayisi =  preparedStatement.executeUpdate();
+		preparedStatement.setString(1, "555555"); //1. soru isareti
+		preparedStatement.setString(2, "%e_"); // 2. soru isareti
+		etkilenenSatirSayisi =  preparedStatement.executeUpdate(); // update sorgusu oldugu için bize ınteger donecek
+
 
 
 	}
@@ -147,7 +148,7 @@ public class stepDefinition {
 
 	}
 
-// ********** INSERT **********
+// **************************INSERT ****************************************
 
 	@Given("\\(device_tokens) Insert sorgusu hazirlanir ve calistirilir.")
 	public void device_tokens_ınsert_sorgusu_hazirlanir_ve_calistirilir() throws SQLException {

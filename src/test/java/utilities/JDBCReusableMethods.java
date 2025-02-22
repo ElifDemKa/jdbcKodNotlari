@@ -25,7 +25,11 @@ public class JDBCReusableMethods {
             throw new RuntimeException(e);
         }
     }
+    // bu method bir connection create eder. configuration propertiese eklemiş olduğumuz datalara göre
+    // bize bir connection create eder ve yukarıdaki connection içerisine kaydeder
+    // sadece olusturur ve public static olduğu için bütün methodlar bunu görür herhangi bir return u yok
 
+//------------------------------------------------------------------------------------------------------------------------
 
 
     public static Connection getConnection(){
@@ -42,6 +46,13 @@ public class JDBCReusableMethods {
 
         return connection;
     }
+    // eger test yaparken bir yerde connection görmek ve getirmek istiyorsak bu methodu kullanabiliriz
+    // bu da yine aynı yerden verileri ceker ve class seviyesindeki connectiona kaydeder ve
+    // aynı zamanda bunu bize döndürür
+    // NOT: EGER SADECE GÖRMEK İSTEMİYORSAN  SADECE CALISSIN İSTİYORSAN CREATE CONNECTİON
+    // AMA CALISTIĞIN YERDE GÖRMEK İSTİYORSAN GETCONNETİONU KULLANABİLİRSİN
+
+    //------------------------------------------------------------------------------------------------------------------------
 
 
     public static Statement getStatement(){
@@ -54,7 +65,12 @@ public class JDBCReusableMethods {
 
         return statement;
     }
+    // Yine sadece statement almak istiyorsan
+    // yukarıda olusturulan connectionu alıyorsun o connectıonun uzerine bir statemen create edip
+    // o statementı buraya atıyoruz ve o statmenti bize döndürür
+    //connection yoksa statement alamayız ve connectionun içi bos olmamalı hata alırız
 
+//-----------------------------------------------------------------------------------------------------------------
 
     public static ResultSet executeQuery(String Query){
 
@@ -72,6 +88,15 @@ public class JDBCReusableMethods {
 
         return resultSet;
     }
+    //queryi çalıstırmak istiyorum select sorgusu calıstırmak istiyorum
+    //select sorgusunda  queryi parametre olarak gönderdiğim zaman bı methods calısır
+    //Önce connection create edecek yukarıda , sonra bir satatement olusturucak connection üzerine
+    //sonra o connectionu bir resulktsete atacak ve resultseti de bana getirecek
+    //yani aslında bütün select sorgularını bu methodla cozebiliriz
+    //result seti elimize alır istedğimiz gibi oynarız.
+
+
+//--------------------------------------------------------------------------------------------------------------
 
     public static int updateQuery(String query) {
         getStatement();
@@ -85,7 +110,13 @@ public class JDBCReusableMethods {
         System.out.println("Etkilenen satir sayisi: "+affectedRows);
         return affectedRows;
     }
+    //bir update query calsıtıracaksak bişr get statementi cagırırız
+    //sonra o statemen uzerine execute update calsıtırırz ve
+    // parametre olarak gelen queriy bunu  iççine koyarız
+    // bu bize etkilenen satır sayısını int olarak döner
+    //butun update querylerini bu methodla cözebilirz
 
+//----------------------------------------------------------------------------------------------------------
 
 
 
@@ -115,6 +146,15 @@ public class JDBCReusableMethods {
 
 
     }
+    //Close connection ile önce resultset, sonra statement sonra da connectionu kapatırtız
+    // null değilse kapatırız
+
+
+//----------------------------------------------------------------------------------------------------------
+
+
+    //getrowcount yani benim resultset içinde kac satırım var
+    // bunu öğrenmek için bu methodu çalıstırabiliriz
 
     public static int getRowCount() throws Exception {
         resultSet.last();
@@ -122,19 +162,35 @@ public class JDBCReusableMethods {
         return rowCount;
     }
 
+
+//------------------------------------------------------------------------------------------------------
+
+    //getrowmap satırları map a atarsın , bir string ve objecten olusan map e döküyorsun
+
     public static Map<String, Object> getRowMap(String query) {
         return getQueryResultMap(query).get(0);
     }
 
+
+//-----------------------------------------------------------------------------------------------------
+
+    //getrowlist bir listin içerisine ve listin icerisindeki satırlara gidiyorsun
     public static List<Object> getRowList(String query, int row) {
 
         return getQueryResultList(query).get(row);
     }
+//---------------------------------------------------------------------------------------------
+    //getcellvalue örneğın 3. stırın 2.columndaki data
+    // burda da int row int columg girersin ordaki datayı ceker sana getirir
 
     public static Object getCellValue(String query, int row, int column) {
 
         return getQueryResultList(query).get(row).get(column);
     }
+//-----------------------------------------------------------------------------------
+
+    //getquerylist resultsetin tamamını bir liste atmak istiyorsan
+    //bu methodu kullanabilirsin
 
     public static List<List<Object>> getQueryResultList(String query) {
         executeQuery(query);
@@ -155,7 +211,10 @@ public class JDBCReusableMethods {
         }
         return rowList;
     }
-
+//-------------------------------------------------------------------------------------
+    //getcolumndata yani kac tane column var
+    //reult setin içerisindeki column isimlerini ogreniriz
+    // ve ardından asagıdaki methodla map e dokeriz
 
     public static List<Object> getColumnData(String query, String column) {
         executeQuery(query);
@@ -193,6 +252,9 @@ public class JDBCReusableMethods {
         return rowList;
     }
 
+//-------------------------------------------------------------------------------------------------------------
+    //getcolumnNmes columların ısımlerini ogrenmek için
+
     public static List<String> getColumnNames(String query) {
         executeQuery(query);
         List<String> columns = new ArrayList<>();
@@ -208,6 +270,8 @@ public class JDBCReusableMethods {
         }
         return columns;
     }
+//-----------------------------------------------------------------------------------------
+    //result setin tamamını yazdırmak için bu methodu kullanırız
 
     public static void printResultSet(ResultSet resultSet) {
         try {
